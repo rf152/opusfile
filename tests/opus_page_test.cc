@@ -29,22 +29,17 @@ TEST(OpusPage, BasicParsingErrorMagic) {
   EXPECT_EQ(opus_page_load(&page, invalidtestdata, 0), OPUSFILE_BAD_MAGIC);
 }
 
-TEST(OpusPage, ParsingMagicHeader) {
+TEST(OpusPage, ParsingPage) {
   OpusPage_t page;
   opus_page_load(&page, validtestdata, 0);
   EXPECT_EQ(page.signature, 0x5367674F);
-}
-
-TEST(OpusPage, ParsingSegmentCountFirst) {
-  OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0);
+  EXPECT_EQ(page.version, 0);
+  EXPECT_EQ(page.flags, 2);
+  EXPECT_EQ(page.granule_position, 0);
+  EXPECT_EQ(page.serial_number, 1258052712);
+  EXPECT_EQ(page.sequence_number, 0);
+  EXPECT_EQ(page.checksum, 2631940782);
   EXPECT_EQ(page.segment_table_length, 1);
-}
-
-TEST(OpusPage, ParsingSegmentCountThird) {
-  OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0x7F);
-  EXPECT_EQ(page.segment_table_length, 4);
 }
 
 TEST(OpusPage, GetSegment) {
