@@ -34,3 +34,14 @@ target_link_libraries(
 target_link_libraries(opus_id_header_test opus_file)
 gtest_discover_tests(opus_id_header_test)
 
+add_executable(
+  opus_comment_header
+  opus_comment_header_test.cc
+)
+target_link_libraries(
+  opus_comment_header
+  GTest::gtest_main
+)
+
+target_link_libraries(opus_comment_header opus_file)
+gtest_discover_tests(opus_comment_header)
