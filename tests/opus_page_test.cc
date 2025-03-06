@@ -22,9 +22,7 @@
 // Demonstrate some basic assertions.
 TEST(OpusPage, BasicParsing) {
   OpusPage_t page;
-  enum OPUSFILE_RETURN retval;
-  retval = opus_page_load(&page, validtestdata, 0);
-  ASSERT_EQ(retval, OPUSFILE_OK);
+  ASSERT_EQ(opus_page_load(&page, validtestdata, 0), OPUSFILE_OK);
 }
 TEST(OpusPage, BasicParsingErrorMagic) {
   OpusPage_t page;
