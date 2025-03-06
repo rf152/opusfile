@@ -30,7 +30,7 @@ TEST(OpusIdHeader, BasicParsingError) {
             OPUSFILE_BAD_MAGIC);
 }
 
-TEST(OpusPage, ParsingHeader) {
+TEST(OpusIdHeader, ParsingHeader) {
   OpusIdHeader_t header;
   opus_id_header_load(&header, validtestdata + 0x1C);
   EXPECT_EQ(header.signature, 0x646165487375704F);

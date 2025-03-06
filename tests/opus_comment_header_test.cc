@@ -31,7 +31,7 @@ TEST(OpusCommentHeader, BasicParsingError) {
             OPUSFILE_BAD_MAGIC);
 }
 
-TEST(OpusPage, ParsingHeader) {
+TEST(OpusCommentHeader, ParsingHeader) {
   OpusCommentHeader_t header;
   opus_comment_header_load(&header, validtestdata + 0x4B);
   EXPECT_EQ(header.signature, 0x736761547375704F);
