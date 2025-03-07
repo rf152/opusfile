@@ -22,16 +22,19 @@
 // Demonstrate some basic assertions.
 TEST(OpusPage, BasicParsing) {
   OpusPage_t page;
-  ASSERT_EQ(opus_page_load(&page, validtestdata, 0), OPUSFILE_OK);
+  ASSERT_EQ(opus_page_load(&page, test_data, 0), OPUSFILE_OK);
 }
 TEST(OpusPage, BasicParsingErrorMagic) {
   OpusPage_t page;
-  EXPECT_EQ(opus_page_load(&page, invalidtestdata, 0), OPUSFILE_BAD_MAGIC);
+  char invalid_test_data[762];
+  memcpy(invalid_test_data, test_data, 762);
+  invalid_test_data[0] = '\x76';
+  EXPECT_EQ(opus_page_load(&page, invalid_test_data, 0), OPUSFILE_BAD_MAGIC);
 }
 
 TEST(OpusPage, ParsingPage) {
   OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0);
+  opus_page_load(&page, test_data, 0);
   EXPECT_EQ(page.signature, 0x5367674F);
   EXPECT_EQ(page.version, 0);
   EXPECT_EQ(page.flags, 2);
@@ -44,7 +47,7 @@ TEST(OpusPage, ParsingPage) {
 
 TEST(OpusPage, GetSegment) {
   OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0);
+  opus_page_load(&page, test_data, 0);
   char buffer[19];
   char data[19] = {
     '\x4F', '\x70', '\x75', '\x73', '\x48', '\x65', '\x61', '\x64',
@@ -57,14 +60,14 @@ TEST(OpusPage, GetSegment) {
 
 TEST(OpusPage, GetInvalidSegment) {
   OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0);
+  opus_page_load(&page, test_data, 0);
   char buffer[19];
   EXPECT_EQ(opus_page_get_segment(&page, 1, buffer), OPUSFILE_INVALID_SEGMENT);
 }
 
 TEST(OpusPage, GetNextSegment) {
   OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0);
+  opus_page_load(&page, test_data, 0);
   char buffer[19];
   char data[19] = {
     '\x4F', '\x70', '\x75', '\x73', '\x48', '\x65', '\x61', '\x64',
@@ -77,7 +80,7 @@ TEST(OpusPage, GetNextSegment) {
 
 TEST(OpusPage, GetNextSegmentEndOfPage) {
   OpusPage_t page;
-  opus_page_load(&page, validtestdata, 0);
+  opus_page_load(&page, test_data, 0);
   char buffer[19];
   opus_page_get_next_segment(&page, buffer);
   EXPECT_EQ(opus_page_get_next_segment(&page, buffer), OPUSFILE_END_OF_PAGE);

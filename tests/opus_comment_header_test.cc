@@ -22,18 +22,21 @@
 // Demonstrate some basic assertions.
 TEST(OpusCommentHeader, BasicParsing) {
   OpusCommentHeader_t header;
-  ASSERT_EQ(opus_comment_header_load(&header, validtestdata + 0x4B),
+  ASSERT_EQ(opus_comment_header_load(&header, test_data + 0x4B),
             OPUSFILE_OK);
 }
 TEST(OpusCommentHeader, BasicParsingError) {
   OpusCommentHeader_t header;
-  ASSERT_EQ(opus_comment_header_load(&header, invalidtestdata + 0x4B),
+  char invalid_test_data[762];
+  memcpy(invalid_test_data, test_data, 762);
+  invalid_test_data[0x4D] = '\x76';
+  ASSERT_EQ(opus_comment_header_load(&header, invalid_test_data + 0x4B),
             OPUSFILE_BAD_MAGIC);
 }
 
 TEST(OpusCommentHeader, ParsingHeader) {
   OpusCommentHeader_t header;
-  opus_comment_header_load(&header, validtestdata + 0x4B);
+  opus_comment_header_load(&header, test_data + 0x4B);
   EXPECT_EQ(header.signature, 0x736761547375704F);
   EXPECT_EQ(header.vendor_string_length, 11);
 }

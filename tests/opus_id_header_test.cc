@@ -22,17 +22,20 @@
 // Demonstrate some basic assertions.
 TEST(OpusIdHeader, BasicParsing) {
   OpusIdHeader_t header;
-  ASSERT_EQ(opus_id_header_load(&header, validtestdata + 0x1C), OPUSFILE_OK);
+  ASSERT_EQ(opus_id_header_load(&header, test_data + 0x1C), OPUSFILE_OK);
 }
 TEST(OpusIdHeader, BasicParsingError) {
   OpusIdHeader_t header;
-  ASSERT_EQ(opus_id_header_load(&header, invalidtestdata + 0x1C),
+  char invalid_test_data[762];
+  memcpy(invalid_test_data, test_data, 762);
+  invalid_test_data[0x22] = '\x76';
+  ASSERT_EQ(opus_id_header_load(&header, invalid_test_data + 0x1C),
             OPUSFILE_BAD_MAGIC);
 }
 
 TEST(OpusIdHeader, ParsingHeader) {
   OpusIdHeader_t header;
-  opus_id_header_load(&header, validtestdata + 0x1C);
+  opus_id_header_load(&header, test_data + 0x1C);
   EXPECT_EQ(header.signature, 0x646165487375704F);
   EXPECT_EQ(header.version, 1);
   EXPECT_EQ(header.channel_count, 1);
